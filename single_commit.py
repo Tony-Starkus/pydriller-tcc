@@ -25,7 +25,7 @@ Commit filters
       NOT the email.
     - only_commits (List[str]): only these commits will be analyzed.
 """
-from pydriller import Repository
+from pydriller_tcc import Repository
 
 repo1 = Repository("./repositories/pydriller")
 print(f"{repo1=}")
