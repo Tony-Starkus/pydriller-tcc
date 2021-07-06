@@ -1,6 +1,6 @@
 from pydriller import Repository
 from datetime import datetime
-from statistics import statistic2
+from statistics import statistic2, statistic4, statistic7
 import os
 import csv
 
@@ -50,13 +50,18 @@ while True:
     op = int(input("0. Exit\n"
                    "1. Show repositories list.\n"
                    "2. Count LOC per author on Repositories on Time Window.\n"
-                   "3. Count commits on Repositories on Time Window.\n"))
+                   "3. Count commits on Repositories on Time Window.\n"
+                   "4. Count developers commits on Time Window.\n"
+                   "7. Count active developers on Time Window.\n"))
 
     if op == 0:
         exit(1)
 
     # 1
     elif op == 1:
+        """
+            $ git checkout <hash>
+        """
         for index, repo in enumerate(_path_list):
             print(f"Repository {index + 1}: {repo}")
 
@@ -102,6 +107,7 @@ while True:
 
                 # Repository name
                 writer.writerow([path.split("/")[2]])
+                print(f"Mining on {path.split('/')[2]}")
 
                 # time window
                 for time_window in time_window_list:
@@ -112,3 +118,64 @@ while True:
 
                 writer.writerow("\n")
                 writer.writerow("\n")
+        print("Done!", end="\n\n")
+
+    # 4
+    elif op == 4:
+        if os.path.exists("./results/statistic4.csv"):
+            os.remove("./results/statistic4.csv")
+
+        with open("./results/statistic4.csv", "w") as file:
+            writer = csv.writer(file)
+            writer.writerow(["This file count the total commits in the Repository on window time."])
+
+            for path in _path_list:
+
+                # Repository name
+                writer.writerow([path.split("/")[2]])
+                print(f"Mining on {path.split('/')[2]}")
+
+                # time window
+                for time_window in time_window_list:
+                    writer.writerow([time_window['since'].date(), time_window['to'].date()])
+                    repo = Repository(path, since=time_window['since'], to=time_window['to'])
+                    results = statistic4.main(repo)
+                    for author, count in results.items():
+                        writer.writerow([author, count])
+
+                    writer.writerow(["Total commits", sum(results.values())])
+                    writer.writerow("")
+
+                writer.writerow("\n")
+                writer.writerow("\n")
+
+    # 7
+    elif op == 7:
+        if os.path.exists("./results/statistic7.csv"):
+            os.remove("./results/statistic7.csv")
+
+        with open("./results/statistic7.csv", "w") as file:
+            writer = csv.writer(file)
+            writer.writerow(["This file count the active authors on Time Windows.\n"
+                             "An active author the the one who has at least one commit."])
+
+            for path in _path_list:
+
+                # Repository name
+                writer.writerow([path.split("/")[2]])
+                print(f"Mining on {path.split('/')[2]}")
+
+                # time window
+                for time_window in time_window_list:
+                    writer.writerow([time_window['since'].date(), time_window['to'].date()])
+                    repo = Repository(path, since=time_window['since'], to=time_window['to'])
+                    results = statistic7.main(repo)
+                    for author in results:
+                        writer.writerow([author])
+
+                    writer.writerow(["Total ative developers", len(results)])
+                    writer.writerow("")
+
+                writer.writerow("\n")
+                writer.writerow("\n")
+    print("Done!", end="\n\n")

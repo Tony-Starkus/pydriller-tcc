@@ -1,3 +1,5 @@
+"This file count the modified lines per author in the Repository.
+The count is the total number of added + deleted lines."
 Brasilino
 2019-01-01,2019-06-30
 eltonfernando,1
