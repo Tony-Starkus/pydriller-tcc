@@ -47,7 +47,7 @@ aux = 0
 print(f"Welcome!")
 while True:
 
-    op = int(input("0. Exit\n"
+    op = int(input("0. Exit.\n"
                    "1. Show repositories list.\n"
                    "2. Count LOC per author on Repositories on Time Window.\n"
                    "3. Count commits on Repositories on Time Window.\n"

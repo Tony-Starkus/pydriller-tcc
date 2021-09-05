@@ -15,9 +15,9 @@ def main(url: str, time_window_list: list) -> dict:
     print(f"Mining on {url.split('/')[5]}")
     while True:
 
-        response = requests.get(f"{url}?page={page}&state=closed&access_token=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")
+        response = requests.get(f"{url}?page={page}&state=closed&access_token=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")
 
-        if response.status_code == 403:
+        if response.status_code in range(300, 500):
             print(f"Error: {response.json()['message']}")
             exit(1)
 
